@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { checkoutSchema, CheckoutFormData } from "@/schemas/checkout";
 import { createOrder } from "@/actions/orders";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Loader2, CreditCard, ShieldCheck } from "lucide-react";
@@ -80,17 +80,18 @@ export default function CheckoutPage() {
     }
   }, [watchCep, setValue]);
 
-  // Meta Pixel — InitiateCheckout ao abrir a página de checkout
+  // Meta Pixel — InitiateCheckout (dispara 1x quando o carrinho hidrata)
+  const firedInitiateCheckout = useRef(false);
   useEffect(() => {
-    if (items.length > 0) {
+    if (!firedInitiateCheckout.current && items.length > 0) {
+      firedInitiateCheckout.current = true;
       fbpTrack("InitiateCheckout", {
         value: finalTotal,
         currency: "BRL",
         num_items: items.reduce((acc, i) => acc + i.quantity, 0),
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [items, finalTotal]);
 
   const onSubmit = async (data: CheckoutFormData) => {
     if (items.length === 0) {
