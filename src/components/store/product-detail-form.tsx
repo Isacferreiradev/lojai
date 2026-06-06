@@ -6,9 +6,10 @@ import { Product } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/stores/cart-store";
 import { formatCurrency } from "@/lib/utils";
-import { ShoppingCart, CreditCard, Minus, Plus } from "lucide-react";
+import { ShoppingCart, CreditCard, Minus, Plus, ShieldCheck, Zap, Truck } from "lucide-react";
 import { toast } from "sonner";
 import { fbpTrack } from "@/lib/fbpixel";
+import { SHIPPING_FREE_LIMIT } from "@/lib/constants";
 
 interface ProductDetailFormProps {
   product: Product & {
@@ -73,20 +74,30 @@ export function ProductDetailForm({ product }: ProductDetailFormProps) {
   return (
     <div className="space-y-6">
       {/* Price block */}
-      <div className="flex flex-wrap items-baseline gap-3">
-        {promoPrice && (
-          <span className="font-mono text-base font-semibold text-muted-foreground line-through">
-            {formatCurrency(originalPrice)}
+      <div className="space-y-1.5">
+        <div className="flex flex-wrap items-baseline gap-3">
+          {promoPrice && (
+            <span className="font-mono text-base font-semibold text-muted-foreground line-through">
+              {formatCurrency(originalPrice)}
+            </span>
+          )}
+          <span className="font-heading text-4xl font-extrabold text-foreground">
+            {formatCurrency(activePrice)}
           </span>
-        )}
-        <span className="font-heading text-4xl font-extrabold text-foreground">
-          {formatCurrency(activePrice)}
-        </span>
-        {promoPrice && (
-          <span className="border-2 border-foreground bg-primary px-2 py-0.5 font-mono text-[0.65rem] font-bold uppercase tracking-wide text-primary-foreground">
-            Economize {formatCurrency(originalPrice - promoPrice)}
-          </span>
-        )}
+          {promoPrice && (
+            <span className="border-2 border-foreground bg-primary px-2 py-0.5 font-mono text-[0.65rem] font-bold uppercase tracking-wide text-primary-foreground">
+              Economize {formatCurrency(originalPrice - promoPrice)}
+            </span>
+          )}
+        </div>
+        <p className="font-mono text-xs text-muted-foreground">
+          ou <span className="font-semibold text-foreground">12x de {formatCurrency(activePrice / 12)}</span> sem juros
+          {activePrice >= SHIPPING_FREE_LIMIT && (
+            <span className="ml-2 inline-flex items-center gap-1 font-semibold text-primary">
+              <Truck className="h-3.5 w-3.5" /> Frete grátis
+            </span>
+          )}
+        </p>
       </div>
 
       {/* Colors Swatches */}
@@ -160,9 +171,15 @@ export function ProductDetailForm({ product }: ProductDetailFormProps) {
               <Plus className="h-4 w-4" />
             </button>
           </div>
-          <span className="font-mono text-xs font-medium text-muted-foreground">
-            {product.stock > 0 ? `${product.stock} em estoque` : "Indisponível"}
-          </span>
+          {product.stock > 0 && product.stock <= 10 ? (
+            <span className="inline-flex items-center gap-1 border-2 border-foreground bg-accent px-2 py-0.5 font-mono text-[0.65rem] font-bold uppercase tracking-wide text-accent-foreground">
+              <Zap className="h-3 w-3" /> Últimas {product.stock} unidades
+            </span>
+          ) : (
+            <span className="font-mono text-xs font-medium text-muted-foreground">
+              {product.stock > 0 ? "Em estoque" : "Indisponível"}
+            </span>
+          )}
         </div>
 
         <div className="grid grid-cols-1 gap-3 pt-1 sm:grid-cols-2">
@@ -186,6 +203,28 @@ export function ProductDetailForm({ product }: ProductDetailFormProps) {
             Comprar Agora
           </Button>
         </div>
+
+        <p className="flex items-center justify-center gap-1.5 font-mono text-[0.65rem] uppercase tracking-wide text-muted-foreground">
+          <ShieldCheck className="h-3.5 w-3.5 text-primary" />
+          Pagamento 100% seguro · PIX instantâneo
+        </p>
+      </div>
+
+      {/* Sticky mobile buy bar */}
+      <div className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t-2 border-foreground bg-background/95 p-3 backdrop-blur-md md:hidden">
+        <div className="leading-none">
+          <p className="font-heading text-lg font-extrabold text-foreground">{formatCurrency(activePrice)}</p>
+          <p className="font-mono text-[0.6rem] text-muted-foreground">12x {formatCurrency(activePrice / 12)}</p>
+        </div>
+        <Button
+          size="lg"
+          className="h-12 flex-1 cursor-pointer gap-2 text-xs"
+          onClick={handleBuyNow}
+          disabled={product.stock <= 0}
+        >
+          <CreditCard className="h-4 w-4" />
+          Comprar Agora
+        </Button>
       </div>
     </div>
   );
