@@ -62,13 +62,19 @@ export async function POST(request: Request) {
 
     const pixCode = tx.pix?.pix_qr_code || null;
 
-    // Persist the gateway reference + pix code on the payment record
+    // Preserve any tracking already stored (fbp/fbc) and add the PIX data
+    const existingPayment = await prisma.payment.findUnique({
+      where: { orderId: order.id },
+      select: { rawData: true },
+    });
+    const prevRaw = (existingPayment?.rawData ?? {}) as Record<string, unknown>;
+
     await prisma.payment.update({
       where: { orderId: order.id },
       data: {
         method: PaymentMethod.PIX,
         externalId: tx.hash,
-        rawData: { pix_qr_code: pixCode, ironpay_id: tx.id, hash: tx.hash } as object,
+        rawData: { ...prevRaw, pix_qr_code: pixCode, ironpay_id: tx.id, hash: tx.hash } as object,
       },
     });
 

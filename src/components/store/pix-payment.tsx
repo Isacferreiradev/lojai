@@ -29,11 +29,11 @@ export function PixPayment({ orderId, pixCode, total }: PixPaymentProps) {
         if (data.paid) {
           setPaid(true);
           clearInterval(interval);
-          fbpTrack("Purchase", {
-            value: total ?? 0,
-            currency: "BRL",
-            content_type: "product",
-          });
+          fbpTrack(
+            "Purchase",
+            { value: total ?? 0, currency: "BRL", content_type: "product" },
+            orderId // mesmo event_id da Conversions API → Meta deduplica
+          );
           toast.success("Pagamento confirmado! 🎉");
           setTimeout(() => router.refresh(), 1500);
         }

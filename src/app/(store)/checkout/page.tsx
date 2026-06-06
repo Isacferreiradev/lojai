@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Loader2, CreditCard, ShieldCheck } from "lucide-react";
 import Image from "next/image";
-import { fbpTrack } from "@/lib/fbpixel";
+import { fbpTrack, getCookie } from "@/lib/fbpixel";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -102,7 +102,10 @@ export default function CheckoutPage() {
     setIsSubmitting(true);
     try {
       // 1. Create order in our database
-      const orderResult = await createOrder(data, items, couponCode);
+      const orderResult = await createOrder(data, items, couponCode, {
+        fbp: getCookie("_fbp"),
+        fbc: getCookie("_fbc"),
+      });
       
       if (!orderResult.success || !orderResult.orderId) {
         throw new Error(orderResult.error || "Falha ao criar o pedido.");

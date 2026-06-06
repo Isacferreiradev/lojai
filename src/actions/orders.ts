@@ -56,7 +56,8 @@ export async function validateCoupon(code: string, orderValue: number) {
 export async function createOrder(
   formData: CheckoutFormData,
   cartItems: CartItem[],
-  couponCode?: string | null
+  couponCode?: string | null,
+  tracking?: { fbp?: string; fbc?: string }
 ) {
   try {
     // 1. Guest checkout — resolve or create a lead by e-mail (no login required)
@@ -187,12 +188,16 @@ export async function createOrder(
         })),
       });
 
-      // e. Create Payment record
+      // e. Create Payment record (guarda fbp/fbc p/ a Conversions API)
       await tx.payment.create({
         data: {
           orderId: newOrder.id,
           status: PaymentStatus.PENDING,
           amount: total,
+          rawData:
+            tracking && (tracking.fbp || tracking.fbc)
+              ? ({ fbp: tracking.fbp ?? null, fbc: tracking.fbc ?? null } as object)
+              : undefined,
         },
       });
 

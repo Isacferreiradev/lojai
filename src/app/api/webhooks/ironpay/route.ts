@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getTransaction, mapIronpayStatus } from "@/lib/ironpay";
+import { sendPurchaseEvent } from "@/lib/meta-capi";
 import { OrderStatus, PaymentStatus } from "@prisma/client";
 
 // Healthcheck — visiting in a browser (GET) confirms the endpoint is live.
@@ -30,7 +31,7 @@ export async function POST(request: Request) {
     // Locate the order by the gateway reference stored at checkout
     const payment = await prisma.payment.findUnique({
       where: { externalId: hash },
-      include: { order: true },
+      include: { order: { include: { items: true } } },
     });
 
     if (!payment) {
@@ -39,7 +40,10 @@ export async function POST(request: Request) {
     }
 
     const orderId = payment.orderId;
+    const order = payment.order;
     const isPaid = mapped.order === "PAID";
+    const becamePaid = isPaid && order.status !== "PAID";
+    const existingRaw = (payment.rawData ?? {}) as Record<string, unknown> & { fbp?: string; fbc?: string };
 
     await prisma.$transaction(async (tx) => {
       await tx.payment.update({
@@ -47,11 +51,12 @@ export async function POST(request: Request) {
         data: {
           status: PaymentStatus[mapped.payment],
           paidAt: isPaid ? new Date() : null,
-          rawData: (verified ?? body) as object,
+          // preserva pix_qr_code/fbp/fbc e acrescenta o retorno do gateway
+          rawData: { ...existingRaw, gateway: (verified ?? body) as object } as object,
         },
       });
 
-      if (payment.order.status !== mapped.order) {
+      if (order.status !== mapped.order) {
         await tx.order.update({
           where: { id: orderId },
           data: { status: OrderStatus[mapped.order] },
@@ -65,6 +70,27 @@ export async function POST(request: Request) {
         });
       }
     });
+
+    // Conversions API — Purchase server-side (1x, ao confirmar pagamento)
+    if (becamePaid) {
+      await sendPurchaseEvent({
+        eventId: order.id, // dedup com o pixel do navegador
+        value: Number(order.total),
+        currency: "BRL",
+        email: order.shippingEmail,
+        phone: order.shippingPhone,
+        firstName: order.shippingName,
+        lastName: order.shippingSurname,
+        city: order.shippingCity,
+        state: order.shippingState,
+        zip: order.shippingCep,
+        country: "br",
+        contentIds: order.items.map((i) => i.productId),
+        fbp: existingRaw.fbp,
+        fbc: existingRaw.fbc,
+        eventSourceUrl: `${process.env.NEXT_PUBLIC_SITE_URL || ""}/produtos`,
+      });
+    }
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
