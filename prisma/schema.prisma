@@ -1,0 +1,345 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ═══════════════════════════════════════
+// USERS & AUTH
+// ═══════════════════════════════════════
+
+model User {
+  id            String    @id @default(uuid())
+  supabaseId    String    @unique @map("supabase_id")
+  email         String    @unique
+  name          String
+  surname       String?
+  cpf           String?   @unique
+  phone         String?
+  role          Role      @default(CUSTOMER)
+  isActive      Boolean   @default(true) @map("is_active")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  addresses     Address[]
+  orders        Order[]
+  couponUsages  CouponUsage[]
+
+  @@map("users")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+  SUPER_ADMIN
+}
+
+model Address {
+  id            String    @id @default(uuid())
+  userId        String    @map("user_id")
+  label         String?   // "Casa", "Trabalho"
+  cep           String
+  street        String
+  number        String
+  complement    String?
+  neighborhood  String
+  city          String
+  state         String
+  isDefault     Boolean   @default(false) @map("is_default")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orders        Order[]
+
+  @@map("addresses")
+}
+
+// ═══════════════════════════════════════
+// PRODUCTS & CATEGORIES
+// ═══════════════════════════════════════
+
+model Category {
+  id            String    @id @default(uuid())
+  name          String
+  slug          String    @unique
+  description   String?
+  image         String?
+  isActive      Boolean   @default(true) @map("is_active")
+  sortOrder     Int       @default(0) @map("sort_order")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  products      Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id              String    @id @default(uuid())
+  name            String
+  slug            String    @unique
+  sku             String    @unique
+  description     String?   @db.Text
+  brand           String?
+  price           Decimal   @db.Decimal(10, 2)
+  promoPrice      Decimal?  @db.Decimal(10, 2) @map("promo_price")
+  stock           Int       @default(0)
+  material        String?
+  colors          String[]  // Array de cores disponíveis
+  sizes           String[]  // Array de tamanhos disponíveis
+  weight          Decimal?  @db.Decimal(8, 3)
+  width           Decimal?  @db.Decimal(8, 2)
+  height          Decimal?  @db.Decimal(8, 2)
+  depth           Decimal?  @db.Decimal(8, 2)
+  isWashable      Boolean   @default(false) @map("is_washable")
+  isActive        Boolean   @default(true) @map("is_active")
+  isFeatured      Boolean   @default(false) @map("is_featured")
+  totalSold       Int       @default(0) @map("total_sold")
+  metaTitle       String?   @map("meta_title")
+  metaDescription String?   @map("meta_description")
+  metaKeywords    String?   @map("meta_keywords")
+  categoryId      String    @map("category_id")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  category        Category  @relation(fields: [categoryId], references: [id])
+  images          ProductImage[]
+  reviews         Review[]
+  orderItems      OrderItem[]
+
+  @@index([categoryId])
+  @@index([slug])
+  @@index([sku])
+  @@index([isActive, isFeatured])
+  @@map("products")
+}
+
+model ProductImage {
+  id          String    @id @default(uuid())
+  productId   String    @map("product_id")
+  url         String
+  alt         String?
+  sortOrder   Int       @default(0) @map("sort_order")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+// ═══════════════════════════════════════
+// ORDERS & PAYMENTS
+// ═══════════════════════════════════════
+
+model Order {
+  id              String      @id @default(uuid())
+  orderNumber     String      @unique @map("order_number")
+  userId          String      @map("user_id")
+  addressId       String?     @map("address_id")
+  status          OrderStatus @default(PENDING)
+  subtotal        Decimal     @db.Decimal(10, 2)
+  shipping        Decimal     @db.Decimal(10, 2) @default(0)
+  discount        Decimal     @db.Decimal(10, 2) @default(0)
+  total           Decimal     @db.Decimal(10, 2)
+  couponId        String?     @map("coupon_id")
+  shippingName    String?     @map("shipping_name")
+  shippingSurname String?     @map("shipping_surname")
+  shippingCpf     String?     @map("shipping_cpf")
+  shippingPhone   String?     @map("shipping_phone")
+  shippingEmail   String?     @map("shipping_email")
+  shippingCep     String?     @map("shipping_cep")
+  shippingStreet  String?     @map("shipping_street")
+  shippingNumber  String?     @map("shipping_number")
+  shippingComplement String?  @map("shipping_complement")
+  shippingCity    String?     @map("shipping_city")
+  shippingState   String?     @map("shipping_state")
+  notes           String?
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  user            User        @relation(fields: [userId], references: [id])
+  address         Address?    @relation(fields: [addressId], references: [id])
+  coupon          Coupon?     @relation(fields: [couponId], references: [id])
+  items           OrderItem[]
+  payment         Payment?
+  history         OrderHistory[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([orderNumber])
+  @@map("orders")
+}
+
+enum OrderStatus {
+  PENDING
+  AWAITING_PAYMENT
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+model OrderItem {
+  id          String    @id @default(uuid())
+  orderId     String    @map("order_id")
+  productId   String    @map("product_id")
+  name        String
+  sku         String
+  price       Decimal   @db.Decimal(10, 2)
+  quantity    Int
+  color       String?
+  size        String?
+  imageUrl    String?   @map("image_url")
+
+  order       Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id])
+
+  @@map("order_items")
+}
+
+model Payment {
+  id                String        @id @default(uuid())
+  orderId           String        @unique @map("order_id")
+  externalId        String?       @unique @map("external_id")   // MP payment ID
+  preferenceId      String?       @map("preference_id")
+  method            PaymentMethod?
+  status            PaymentStatus @default(PENDING)
+  amount            Decimal       @db.Decimal(10, 2)
+  paidAt            DateTime?     @map("paid_at")
+  rawData           Json?         @map("raw_data")
+  createdAt         DateTime      @default(now()) @map("created_at")
+  updatedAt         DateTime      @updatedAt @map("updated_at")
+
+  order             Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+enum PaymentMethod {
+  PIX
+  CREDIT_CARD
+  DEBIT_CARD
+  BOLETO
+}
+
+enum PaymentStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  REFUNDED
+  IN_PROCESS
+}
+
+model OrderHistory {
+  id          String      @id @default(uuid())
+  orderId     String      @map("order_id")
+  status      OrderStatus
+  note        String?
+  changedBy   String?     @map("changed_by")   // admin user id
+  createdAt   DateTime    @default(now()) @map("created_at")
+
+  order       Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_history")
+}
+
+// ═══════════════════════════════════════
+// REVIEWS
+// ═══════════════════════════════════════
+
+model Review {
+  id          String    @id @default(uuid())
+  productId   String    @map("product_id")
+  name        String
+  city        String?
+  rating      Int       // 1-5
+  comment     String    @db.Text
+  photo       String?
+  isActive    Boolean   @default(true) @map("is_active")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("reviews")
+}
+
+// ═══════════════════════════════════════
+// COUPONS
+// ═══════════════════════════════════════
+
+model Coupon {
+  id            String      @id @default(uuid())
+  code          String      @unique
+  type          CouponType
+  value         Decimal     @db.Decimal(10, 2)  // percentual ou valor fixo
+  minOrderValue Decimal?    @db.Decimal(10, 2) @map("min_order_value")
+  maxUses       Int?        @map("max_uses")
+  usedCount     Int         @default(0) @map("used_count")
+  expiresAt     DateTime?   @map("expires_at")
+  isActive      Boolean     @default(true) @map("is_active")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  updatedAt     DateTime    @updatedAt @map("updated_at")
+
+  orders        Order[]
+  usages        CouponUsage[]
+
+  @@map("coupons")
+}
+
+enum CouponType {
+  PERCENTAGE
+  FIXED
+}
+
+model CouponUsage {
+  id        String    @id @default(uuid())
+  couponId  String    @map("coupon_id")
+  userId    String    @map("user_id")
+  usedAt    DateTime  @default(now()) @map("used_at")
+
+  coupon    Coupon    @relation(fields: [couponId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+
+  @@unique([couponId, userId])
+  @@map("coupon_usages")
+}
+
+// ═══════════════════════════════════════
+// SETTINGS & LOGS
+// ═══════════════════════════════════════
+
+model Setting {
+  id        String    @id @default(uuid())
+  key       String    @unique
+  value     String    @db.Text
+  group     String    @default("general") // general, contact, social, seo
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  @@map("settings")
+}
+
+model AdminLog {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  action      String    // CREATE, UPDATE, DELETE
+  entity      String    // product, order, coupon...
+  entityId    String?   @map("entity_id")
+  details     Json?
+  ipAddress   String?   @map("ip_address")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([entity])
+  @@map("admin_logs")
+}
