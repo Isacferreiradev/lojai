@@ -17,6 +17,7 @@ import {
   ClipboardList,
   DollarSign,
   Plug,
+  Image as ImageIcon,
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -27,6 +28,7 @@ const menuItems = [
   { name: "Pedidos", href: "/admin/pedidos", icon: ClipboardList },
   { name: "Produtos", href: "/admin/produtos", icon: ShoppingBag },
   { name: "Categorias", href: "/admin/categorias", icon: FolderTree },
+  { name: "Banners", href: "/admin/banners", icon: ImageIcon },
   { name: "Cupons de Desconto", href: "/admin/cupons", icon: Tag },
   { name: "Avaliações", href: "/admin/avaliacoes", icon: Star },
   { name: "Clientes", href: "/admin/clientes", icon: Users },

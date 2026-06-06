@@ -7,7 +7,6 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 
 interface Slide {
-  id: number;
   eyebrow: string;
   title: string;
   subtitle: string;
@@ -16,39 +15,20 @@ interface Slide {
   imageUrl: string;
 }
 
-const slides: Slide[] = [
-  {
-    id: 1,
-    eyebrow: "Nova Coleção",
-    title: "Tapetes\nque são\narte.",
-    subtitle: "Tecidos à mão com fibras 100% naturais. Sofisticação e conforto para a sua sala de estar.",
-    ctaText: "Ver Coleção",
-    ctaHref: "/produtos?category=sala",
-    imageUrl: "/images/hero-1.png",
-  },
-  {
-    id: 2,
-    eyebrow: "Design Contemporâneo",
-    title: "Linha,\nforma &\ngeometria.",
-    subtitle: "Linhas limpas e paleta neutra. O toque de arte moderna que o seu ambiente pedia.",
-    ctaText: "Explorar Modelos",
-    ctaHref: "/produtos?category=boho",
-    imageUrl: "/images/hero-2.png",
-  },
-];
-
-export function HeroBanner() {
+export function HeroBanner({ slides }: { slides: Slide[] }) {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
+    if (slides.length <= 1) return;
     const timer = setInterval(
       () => setCurrent((c) => (c + 1) % slides.length),
       7000
     );
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
-  const slide = slides[current];
+  if (slides.length === 0) return null;
+  const slide = slides[Math.min(current, slides.length - 1)];
 
   return (
     <section className="border-b-2 border-foreground bg-background">
@@ -58,7 +38,7 @@ export function HeroBanner() {
           <div className="flex flex-col justify-center gap-7 border-foreground py-12 lg:border-r-2 lg:py-20 lg:pr-12">
             <div key={`eyebrow-${current}`} className="animate-fade-in flex items-center gap-3">
               <span className="label-mono text-primary">
-                {String(slide.id).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
+                {String(Math.min(current, slides.length - 1) + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
               </span>
               <span className="h-px w-10 bg-foreground" />
               <span className="label-mono text-foreground">{slide.eyebrow}</span>
@@ -98,7 +78,7 @@ export function HeroBanner() {
           <div className="relative min-h-[340px] overflow-hidden bg-muted lg:min-h-[600px]">
             {slides.map((s, index) => (
               <Image
-                key={s.id}
+                key={index}
                 src={s.imageUrl}
                 alt={s.title.replace(/\n/g, " ")}
                 fill

@@ -6,13 +6,15 @@ import { BenefitsSection } from "@/components/store/benefits-section";
 import { Header } from "@/components/store/header";
 import { Footer } from "@/components/store/footer";
 import { getFeaturedProducts, getPromoProducts } from "@/actions/products";
+import { getHeroSlides } from "@/actions/banners";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 export default async function HomePage() {
-  const [featuredProducts, promoProducts] = await Promise.all([
+  const [featuredProducts, promoProducts, heroSlides] = await Promise.all([
     getFeaturedProducts(4),
     getPromoProducts(4),
+    getHeroSlides(),
   ]);
 
   return (
@@ -21,7 +23,7 @@ export default async function HomePage() {
       <main className="flex-1 flex flex-col">
         <div className="flex flex-col gap-0 pb-16">
           {/* Hero */}
-          <HeroBanner />
+          <HeroBanner slides={heroSlides} />
 
           <div className="container mx-auto px-4 md:px-6 space-y-20 mt-14">
             {/* Categorias */}
