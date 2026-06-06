@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Bricolage_Grotesque, JetBrains_Mono } from "next/font/google";
 import { Providers } from "@/components/shared/providers";
+import { MetaPixel } from "@/components/meta-pixel";
 import "./globals.css";
 
 const inter = Inter({
@@ -47,6 +48,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <MetaPixel />
         <Providers>{children}</Providers>
       </body>
     </html>

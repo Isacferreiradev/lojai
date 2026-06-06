@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Loader2, Plus, X, Upload } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ImageUploader } from "@/components/admin/image-uploader";
 
 interface Category {
   id: string;
@@ -493,6 +494,16 @@ export function ProductForm({ categories, defaultValues, productId, existingImag
                 ))}
               </div>
             )}
+
+            {/* Upload de arquivos */}
+            <ImageUploader
+              folder="produtos"
+              multiple
+              label="Arraste as imagens ou clique (várias de uma vez)"
+              onUploaded={(url) =>
+                setImageUrls((prev) => (prev.includes(url) ? prev : [...prev, url]))
+              }
+            />
 
             {/* Add image URL */}
             <div className="flex gap-2">

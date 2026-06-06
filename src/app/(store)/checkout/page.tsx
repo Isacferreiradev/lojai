@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Loader2, CreditCard, ShieldCheck } from "lucide-react";
 import Image from "next/image";
+import { fbpTrack } from "@/lib/fbpixel";
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -78,6 +79,18 @@ export default function CheckoutPage() {
       fetchAddress();
     }
   }, [watchCep, setValue]);
+
+  // Meta Pixel — InitiateCheckout ao abrir a página de checkout
+  useEffect(() => {
+    if (items.length > 0) {
+      fbpTrack("InitiateCheckout", {
+        value: finalTotal,
+        currency: "BRL",
+        num_items: items.reduce((acc, i) => acc + i.quantity, 0),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSubmit = async (data: CheckoutFormData) => {
     if (items.length === 0) {

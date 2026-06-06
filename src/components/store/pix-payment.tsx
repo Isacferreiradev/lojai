@@ -5,13 +5,15 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Copy, Check, Loader2, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
+import { fbpTrack } from "@/lib/fbpixel";
 
 interface PixPaymentProps {
   orderId: string;
   pixCode: string | null;
+  total?: number;
 }
 
-export function PixPayment({ orderId, pixCode }: PixPaymentProps) {
+export function PixPayment({ orderId, pixCode, total }: PixPaymentProps) {
   const router = useRouter();
   const [copied, setCopied] = useState(false);
   const [paid, setPaid] = useState(false);
@@ -27,6 +29,11 @@ export function PixPayment({ orderId, pixCode }: PixPaymentProps) {
         if (data.paid) {
           setPaid(true);
           clearInterval(interval);
+          fbpTrack("Purchase", {
+            value: total ?? 0,
+            currency: "BRL",
+            content_type: "product",
+          });
           toast.success("Pagamento confirmado! 🎉");
           setTimeout(() => router.refresh(), 1500);
         }

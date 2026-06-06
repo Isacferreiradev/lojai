@@ -35,7 +35,7 @@ export default async function PixCheckoutPage({ params }: PageProps) {
       <div className="mt-8 grid grid-cols-1 items-start gap-8 lg:grid-cols-3">
         {/* PIX */}
         <div className="lg:col-span-2">
-          <PixPayment orderId={order.id} pixCode={pixCode} />
+          <PixPayment orderId={order.id} pixCode={pixCode} total={Number(order.total)} />
         </div>
 
         {/* Order summary */}

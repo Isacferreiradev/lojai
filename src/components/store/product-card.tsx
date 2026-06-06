@@ -8,6 +8,7 @@ import { useCartStore } from "@/stores/cart-store";
 import { Star, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { fbpTrack } from "@/lib/fbpixel";
 
 interface ProductCardProps {
   product: ProductWithImages;
@@ -41,9 +42,15 @@ export function ProductCard({ product }: ProductCardProps) {
       stock: product.stock,
     });
 
-    toast.success(`${product.name} adicionado!`, {
-      description: "Item adicionado ao seu carrinho.",
+    fbpTrack("AddToCart", {
+      content_ids: [product.id],
+      content_name: product.name,
+      content_type: "product",
+      value: activePrice,
+      currency: "BRL",
     });
+
+    toast.success("Adicionado ao carrinho", { duration: 1800 });
   };
 
   return (

@@ -10,6 +10,9 @@ import { getHeroSlides } from "@/actions/banners";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
+// Sempre ler do banco (banners e produtos refletem mudanças na hora).
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const [featuredProducts, promoProducts, heroSlides] = await Promise.all([
     getFeaturedProducts(4),

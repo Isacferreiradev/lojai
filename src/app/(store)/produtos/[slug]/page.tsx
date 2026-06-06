@@ -1,6 +1,7 @@
 import { getProductBySlug, getRelatedProducts } from "@/actions/products";
 import { ProductGallery } from "@/components/store/product-gallery";
 import { ProductDetailForm } from "@/components/store/product-detail-form";
+import { TrackViewContent } from "@/components/store/track-view-content";
 import { ProductGrid } from "@/components/store/product-grid";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Star, ShieldCheck, ClipboardList, Eye } from "lucide-react";
@@ -55,6 +56,12 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
   return (
     <div className="container mx-auto px-4 md:px-6 py-8 flex-1 flex flex-col gap-8">
+      <TrackViewContent
+        id={product.id}
+        name={product.name}
+        value={Number(product.promoPrice ?? product.price)}
+      />
+
       {/* Breadcrumbs */}
       <nav className="flex items-center gap-2 font-mono text-[0.65rem] font-semibold uppercase tracking-wider text-muted-foreground">
         <Link href="/" className="hover:text-primary transition-colors">

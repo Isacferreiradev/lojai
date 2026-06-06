@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { saveHeroSlides, type HeroSlide } from "@/actions/banners";
+import { ImageUploader } from "@/components/admin/image-uploader";
 import { toast } from "sonner";
 import { Plus, Trash2, Loader2, Save, GripVertical } from "lucide-react";
 
@@ -85,8 +86,9 @@ export function BannerEditor({ initialSlides }: { initialSlides: HeroSlide[] }) 
               {/* Fields */}
               <div className="space-y-3">
                 <div className="space-y-1.5">
-                  <Label>URL da imagem *</Label>
+                  <Label>Imagem do banner *</Label>
                   <Input value={slide.imageUrl} onChange={(e) => update(i, "imageUrl", e.target.value)} placeholder="/images/hero-1.png ou https://..." />
+                  <ImageUploader folder="banners" onUploaded={(url) => update(i, "imageUrl", url)} />
                 </div>
                 <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                   <div className="space-y-1.5">

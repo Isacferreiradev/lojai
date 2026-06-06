@@ -8,6 +8,7 @@ import { useCartStore } from "@/stores/cart-store";
 import { formatCurrency } from "@/lib/utils";
 import { ShoppingCart, CreditCard, Minus, Plus } from "lucide-react";
 import { toast } from "sonner";
+import { fbpTrack } from "@/lib/fbpixel";
 
 interface ProductDetailFormProps {
   product: Product & {
@@ -41,9 +42,15 @@ export function ProductDetailForm({ product }: ProductDetailFormProps) {
       stock: product.stock,
     });
     
-    toast.success(`${product.name} adicionado ao carrinho!`, {
-      description: `Quantidade: ${quantity} | Cor: ${color} | Tamanho: ${size}`,
+    fbpTrack("AddToCart", {
+      content_ids: [product.id],
+      content_name: product.name,
+      content_type: "product",
+      value: activePrice * quantity,
+      currency: "BRL",
     });
+
+    toast.success("Adicionado ao carrinho", { duration: 1800 });
   };
 
   const handleBuyNow = () => {
