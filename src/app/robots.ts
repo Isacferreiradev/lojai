@@ -11,8 +11,7 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           "/admin",
           "/admin/",
-          "/minha-conta",
-          "/minha-conta/",
+          "/entrar-admin",
           "/checkout",
           "/api/",
         ],
