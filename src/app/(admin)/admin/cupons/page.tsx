@@ -6,7 +6,14 @@ import { CouponActions } from "@/components/admin/coupons/coupon-actions";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 export default async function AdminCouponsPage() {
-  const coupons = await getAdminCoupons();
+  const raw = await getAdminCoupons();
+  // Convert Prisma Decimals to plain numbers so the data is safe to pass
+  // to the client component (CouponActions).
+  const coupons = raw.map((c) => ({
+    ...c,
+    value: Number(c.value),
+    minOrderValue: c.minOrderValue != null ? Number(c.minOrderValue) : null,
+  }));
 
   return (
     <div>
