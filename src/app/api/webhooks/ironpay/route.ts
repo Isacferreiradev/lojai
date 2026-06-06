@@ -3,6 +3,16 @@ import prisma from "@/lib/prisma";
 import { getTransaction, mapIronpayStatus } from "@/lib/ironpay";
 import { OrderStatus, PaymentStatus } from "@prisma/client";
 
+// Healthcheck — visiting in a browser (GET) confirms the endpoint is live.
+// IronPay delivers events via POST below.
+export async function GET() {
+  return NextResponse.json({
+    ok: true,
+    service: "ironpay-webhook",
+    message: "Endpoint ativo. Os eventos do IronPay são recebidos via POST.",
+  });
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => ({} as any));
