@@ -51,7 +51,8 @@ export function Header() {
         <div className="flex w-max animate-marquee">
           {[0, 1].map((dup) => (
             <div key={dup} className="flex shrink-0 items-center" aria-hidden={dup === 1}>
-              {TICKER_ITEMS.map((item, i) => (
+              {/* repete o suficiente para transbordar telas largas e o loop ficar contínuo */}
+              {[...TICKER_ITEMS, ...TICKER_ITEMS, ...TICKER_ITEMS].map((item, i) => (
                 <span
                   key={`${dup}-${i}`}
                   className="flex items-center gap-3 px-5 py-1.5 font-mono text-[0.65rem] font-medium tracking-wider"
