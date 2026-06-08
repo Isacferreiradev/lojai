@@ -65,7 +65,7 @@ export function SearchBar() {
         <div className="relative">
           <Input
             type="search"
-            placeholder="Buscar tapete ideal..."
+            placeholder="Buscar produto ideal..."
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
@@ -89,7 +89,7 @@ export function SearchBar() {
           {loading && results.length === 0 ? (
             <div className="p-4 text-center text-sm text-muted-foreground flex items-center justify-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin text-primary" />
-              Buscando tapetes...
+              Buscando produtos...
             </div>
           ) : results.length > 0 ? (
             <div className="divide-y divide-border">
@@ -120,7 +120,7 @@ export function SearchBar() {
                         {product.name}
                       </h4>
                       <p className="text-xs text-muted-foreground truncate mt-0.5">
-                        {product.material || "Tapete Premium"}
+                        {product.material || "Produto Premium"}
                       </p>
                     </div>
                     <div className="text-right flex-shrink-0">
@@ -147,7 +147,7 @@ export function SearchBar() {
             </div>
           ) : (
             <div className="p-6 text-center text-sm text-muted-foreground">
-              Nenhum tapete encontrado para "{query}"
+              Nenhum produto encontrado para "{query}"
             </div>
           )}
         </div>

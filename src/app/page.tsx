@@ -41,7 +41,7 @@ export default async function HomePage() {
                     Mais Desejados
                   </h2>
                   <p className="text-sm text-muted-foreground">
-                    Nossos tapetes mais amados e elogiados pelos clientes.
+                    Nossos produtos mais amados e elogiados pelos clientes.
                   </p>
                 </div>
                 <Link
@@ -51,7 +51,7 @@ export default async function HomePage() {
                   Ver todos <ArrowRight className="h-4 w-4" />
                 </Link>
               </div>
-              <ProductGrid products={featuredProducts} skeletonCount={4} />
+              <ProductGrid products={featuredProducts} skeletonCount={4} scrollOnMobile={true} />
             </section>
 
             {/* Benefícios */}
@@ -77,7 +77,7 @@ export default async function HomePage() {
                     Ver ofertas <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
-                <ProductGrid products={promoProducts} skeletonCount={4} />
+                <ProductGrid products={promoProducts} skeletonCount={4} scrollOnMobile={true} />
               </section>
             ) : (
               <section className="space-y-8">
@@ -98,7 +98,7 @@ export default async function HomePage() {
                     Ver lançamentos <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
-                <ProductGrid products={[]} skeletonCount={4} />
+                <ProductGrid products={[]} skeletonCount={4} scrollOnMobile={true} />
               </section>
             )}
 

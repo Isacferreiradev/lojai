@@ -233,17 +233,17 @@ export function ProductFilters() {
           <SheetTrigger asChild>
             <Button variant="outline" className="cursor-pointer gap-2 text-sm font-semibold">
               <SlidersHorizontal className="h-4 w-4" />
-              Filtrar Tapetes
+              Filtrar Produtos
               {hasActiveFilters && (
                 <span className="h-2 w-2 bg-primary" />
               )}
             </Button>
           </SheetTrigger>
-          <SheetContent side="bottom" className="h-[80vh] overflow-y-auto bg-card">
-            <SheetHeader className="mb-6 border-b-2 border-foreground pb-4">
+          <SheetContent side="right" className="w-[300px] sm:w-[360px] overflow-y-auto bg-card p-6 border-l-2 border-foreground">
+            <SheetHeader className="p-0 mb-6 border-b-2 border-foreground pb-4">
               <SheetTitle className="flex items-center gap-2 text-xl font-bold">
                 <SlidersHorizontal className="h-5 w-5 text-primary" />
-                Filtrar Tapetes
+                Filtrar Produtos
               </SheetTitle>
             </SheetHeader>
             <div className="pb-8">

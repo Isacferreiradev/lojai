@@ -19,8 +19,7 @@ export function CategoryGrid() {
         </p>
       </div>
 
-      {/* Horizontal scroller — no orphan rows */}
-      <div className="scrollbar-minimal -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-4 md:gap-4">
+      <div className="scrollbar-minimal flex snap-x snap-mandatory gap-3 overflow-x-auto pb-4 md:gap-4">
         {CATEGORIES.map((cat, index) => (
           <Link
             key={cat.slug}
@@ -37,7 +36,7 @@ export function CategoryGrid() {
             />
 
             {/* Index marker */}
-            <span className="absolute left-0 top-0 z-10 border-b-2 border-r-2 border-foreground bg-background px-2 py-1 font-mono text-[0.65rem] font-bold text-foreground">
+            <span className="absolute left-0 top-0 z-10 border-b-2 border-r-2 border-foreground bg-background px-2 py-1 font-mono text-[0.65rem] font-bold text-foreground hidden sm:block">
               {String(index + 1).padStart(2, "0")}
             </span>
 

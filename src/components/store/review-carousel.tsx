@@ -19,8 +19,8 @@ const reviews: ReviewItem[] = [
     name: "Mariana Souza",
     city: "São Paulo, SP",
     rating: 5,
-    comment: "Estou simplesmente apaixonada pelo meu tapete felpudo! Ele é extremamente macio, a cor é exatamente como no site e a entrega foi super rápida. Recomendo muito!",
-    productName: "Tapete Soft Cotton Luxo",
+    comment: "Estou simplesmente apaixonada pela minha nova luminária! O design é lindo, a cor é exatamente como no site e a entrega foi super rápida. Recomendo muito!",
+    productName: "Luminária de mesa cogumelo",
     initials: "MS",
   },
   {
@@ -29,7 +29,7 @@ const reviews: ReviewItem[] = [
     city: "Rio de Janeiro, RJ",
     rating: 5,
     comment: "Excelente qualidade. Comprei o modelo geométrico para a minha sala e ele transformou o ambiente. O acabamento das bordas é perfeito e o material é bem resistente.",
-    productName: "Tapete Nordic Geometric",
+    productName: "Espelho Orgânico Premium",
     initials: "RA",
   },
   {
@@ -37,8 +37,8 @@ const reviews: ReviewItem[] = [
     name: "Beatriz M.",
     city: "Belo Horizonte, MG",
     rating: 5,
-    comment: "Atendimento incrível pós-venda! Tive uma dúvida sobre a lavagem, me responderam super rápido no WhatsApp. O tapete é lindo e de altíssima qualidade.",
-    productName: "Tapete Vintage Boho",
+    comment: "Atendimento incrível pós-venda! Tive uma dúvida sobre a instalação, me responderam super rápido no WhatsApp. O quadro é lindo e de altíssima qualidade.",
+    productName: "Kit de quadros abstratos",
     initials: "BM",
   },
 ];
@@ -60,13 +60,67 @@ export function ReviewCarousel() {
       {/* Header */}
       <div className="mb-8 flex flex-col items-start gap-2 border-b-2 border-foreground pb-5">
         <span className="label-mono text-primary">[ Depoimentos ]</span>
-        <h2 className="display text-4xl text-foreground sm:text-5xl">
+        <h2 className="display text-3xl text-foreground sm:text-4xl md:text-5xl">
           O que dizem<br />sobre nós
         </h2>
       </div>
 
-      {/* Cards Grid — show all, highlight current */}
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      {/* Mobile horizontal scroller */}
+      <div className="scrollbar-minimal -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 md:hidden">
+        {reviews.map((r, index) => {
+          const active = index === current;
+          return (
+            <button
+              key={r.id}
+              onClick={() => go(index)}
+              className={`flex w-[80vw] shrink-0 snap-start cursor-pointer flex-col border-2 border-foreground p-5 text-left transition-all duration-200 ${
+                active
+                  ? "-translate-y-1 bg-primary text-primary-foreground shadow-[5px_5px_0_0_var(--color-foreground)]"
+                  : "bg-card text-foreground"
+              }`}
+            >
+              {/* Stars */}
+              <div className="mb-3 flex gap-0.5">
+                {Array.from({ length: r.rating }).map((_, i) => (
+                  <Star
+                    key={i}
+                    className={`h-3.5 w-3.5 fill-current ${active ? "text-primary-foreground" : "text-primary"}`}
+                  />
+                ))}
+              </div>
+
+              {/* Comment */}
+              <p className={`mb-4 flex-1 text-sm leading-relaxed ${active ? "text-primary-foreground/90" : "text-foreground/75"}`}>
+                &ldquo;{r.comment}&rdquo;
+              </p>
+
+              {/* User */}
+              <div className="flex items-center gap-3 border-t-2 border-current/20 pt-3">
+                <div
+                  className={`flex size-9 shrink-0 items-center justify-center border-2 font-mono text-xs font-bold ${
+                    active
+                      ? "border-primary-foreground bg-primary-foreground/15 text-primary-foreground"
+                      : "border-foreground bg-primary text-primary-foreground"
+                  }`}
+                >
+                  {r.initials}
+                </div>
+                <div>
+                  <p className={`font-heading text-sm font-bold leading-tight ${active ? "text-primary-foreground" : "text-foreground"}`}>
+                    {r.name}
+                  </p>
+                  <p className={`mt-0.5 font-mono text-[0.6rem] ${active ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
+                    {r.city} · {r.productName}
+                  </p>
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Desktop grid */}
+      <div className="hidden gap-4 md:grid md:grid-cols-3">
         {reviews.map((r, index) => {
           const active = index === current;
           return (
@@ -120,7 +174,7 @@ export function ReviewCarousel() {
       </div>
 
       {/* Mobile dots navigation */}
-      <div className="mt-6 flex justify-center gap-2 md:hidden">
+      <div className="mt-4 flex justify-center gap-2 md:hidden">
         <button
           onClick={() => go(current - 1)}
           className="border-2 border-foreground bg-card p-2 text-foreground transition-colors hover:bg-muted"

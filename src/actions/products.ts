@@ -246,3 +246,21 @@ export async function getRelatedProducts(
     return [];
   }
 }
+
+export async function getAllActiveProductNames(): Promise<string[]> {
+  try {
+    const rows = await prisma.product.findMany({
+      where: {
+        isActive: true,
+      },
+      select: {
+        name: true,
+      },
+    });
+    return rows.map((r) => r.name);
+  } catch (error) {
+    console.error("Failed to fetch all active product names:", error);
+    return [];
+  }
+}
+

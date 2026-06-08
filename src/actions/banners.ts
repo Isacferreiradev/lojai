@@ -19,7 +19,7 @@ export interface HeroSlide {
 const DEFAULT_SLIDES: HeroSlide[] = [
   {
     eyebrow: "Nova Coleção",
-    title: "Tapetes\nque são\narte.",
+    title: "Decoração\nque é\narte.",
     subtitle: "Tecidos à mão com fibras 100% naturais. Sofisticação e conforto para a sua sala de estar.",
     ctaText: "Ver Coleção",
     ctaHref: "/produtos?category=sala",

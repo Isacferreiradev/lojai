@@ -155,7 +155,7 @@ export function ProductForm({ categories, defaultValues, productId, existingImag
                   <input
                     {...register("name")}
                     onBlur={generateSlug}
-                    placeholder="Ex: Tapete Persa Classic Bege"
+                    placeholder="Ex: Luminária de Mesa Cogumelo"
                     className="w-full h-10 rounded-none border-2 border-foreground bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
                   />
                   {errors.name && <p className="text-xs text-destructive mt-1">{errors.name.message}</p>}
@@ -165,7 +165,7 @@ export function ProductForm({ categories, defaultValues, productId, existingImag
                   <label className="text-sm font-medium text-foreground mb-1.5 block">Slug *</label>
                   <input
                     {...register("slug")}
-                    placeholder="tapete-persa-classic-bege"
+                    placeholder="luminaria-de-mesa-cogumelo"
                     className="w-full h-10 rounded-none border-2 border-foreground bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 font-mono"
                   />
                   {errors.slug && <p className="text-xs text-destructive mt-1">{errors.slug.message}</p>}
@@ -402,7 +402,7 @@ export function ProductForm({ categories, defaultValues, productId, existingImag
                   <label className="text-sm font-medium text-foreground mb-1.5 block">Palavras-chave</label>
                   <input
                     {...register("metaKeywords")}
-                    placeholder="tapete, sala, moderno, decoração"
+                    placeholder="iluminação, mesa, moderno, decoração"
                     className="w-full h-10 rounded-none border-2 border-foreground bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
                   />
                 </div>

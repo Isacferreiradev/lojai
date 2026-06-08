@@ -47,7 +47,7 @@ export function CartDrawer() {
             </div>
             <h3 className="font-heading text-lg font-bold">O carrinho está vazio</h3>
             <p className="mt-2 max-w-[280px] text-sm text-muted-foreground">
-              Explore nossos tapetes premium e encontre o ideal para sua casa.
+              Explore nossos produtos premium e encontre o ideal para sua casa.
             </p>
             <Button className="mt-6" onClick={() => setOpen(false)}>
               Continuar Comprando

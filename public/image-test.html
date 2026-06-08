@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Viewer</title>
+    <style>
+        .grid { display: flex; flex-wrap: wrap; gap: 20px; }
+        .item { width: 200px; text-align: center; }
+        img { width: 100%; height: auto; }
+    </style>
+</head>
+<body>
+    <div class="grid">
+        <script>
+            for(let i=1; i<=30; i++) {
+                let num = i.toString().padStart(2, '0');
+                document.write(`
+                    <div class="item">
+                        <h3>Produto ${num}</h3>
+                        <img src="/images/produto_${num}/img1_ambiente.jpg" />
+                    </div>
+                `);
+            }
+        </script>
+    </div>
+</body>
+</html>

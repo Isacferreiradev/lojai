@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       `${product.name} — ${product.material ? `Material: ${product.material}. ` : ""}Disponível em ${product.sizes.join(", ")}. A partir de ${formatCurrency(price)}.`,
     keywords: product.metaKeywords
       ? product.metaKeywords.split(",").map((k) => k.trim())
-      : [product.name, product.category.name, product.material || "tapete", "decoração"],
+      : [product.name, product.category.name, product.material || "decoração", "design"],
     openGraph: {
       title: product.name,
       description: product.metaDescription || product.description || "",
@@ -62,25 +62,25 @@ export default async function ProductDetailPage({ params }: PageProps) {
         value={Number(product.promoPrice ?? product.price)}
       />
 
-      {/* Breadcrumbs */}
-      <nav className="flex items-center gap-2 font-mono text-[0.65rem] font-semibold uppercase tracking-wider text-muted-foreground">
-        <Link href="/" className="hover:text-primary transition-colors">
+      {/* Breadcrumbs — horizontal scroll on mobile */}
+      <nav className="scrollbar-minimal -mx-4 flex items-center gap-2 overflow-x-auto whitespace-nowrap px-4 font-mono text-[0.65rem] font-semibold uppercase tracking-wider text-muted-foreground">
+        <Link href="/" className="hover:text-primary transition-colors shrink-0">
           Início
         </Link>
-        <ChevronRight className="h-3 w-3" />
-        <Link href="/produtos" className="hover:text-primary transition-colors">
-          Todos os Tapetes
+        <ChevronRight className="h-3 w-3 shrink-0" />
+        <Link href="/produtos" className="hover:text-primary transition-colors shrink-0">
+          Produtos
         </Link>
-        <ChevronRight className="h-3 w-3" />
-        <Link href={`/produtos?category=${product.category.slug}`} className="hover:text-primary transition-colors">
+        <ChevronRight className="h-3 w-3 shrink-0" />
+        <Link href={`/produtos?category=${product.category.slug}`} className="hover:text-primary transition-colors shrink-0">
           {product.category.name}
         </Link>
-        <ChevronRight className="h-3 w-3" />
-        <span className="text-foreground truncate max-w-[150px] sm:max-w-none">{product.name}</span>
+        <ChevronRight className="h-3 w-3 shrink-0" />
+        <span className="text-foreground truncate max-w-[180px]">{product.name}</span>
       </nav>
 
       {/* Main product presentation grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12 items-start">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:gap-12 items-start">
         {/* Left Side: Photo Gallery */}
         <ProductGallery images={product.images} />
 
@@ -97,28 +97,35 @@ export default async function ProductDetailPage({ params }: PageProps) {
           </div>
 
           {/* Ratings & reviews count */}
-          <div className="flex items-center gap-4 border-b-2 border-foreground pb-4">
-            <div className="flex items-center gap-1">
-              <div className="flex text-primary">
-                <Star className="h-4.5 w-4.5 fill-current" />
-                <Star className="h-4.5 w-4.5 fill-current" />
-                <Star className="h-4.5 w-4.5 fill-current" />
-                <Star className="h-4.5 w-4.5 fill-current" />
-                <Star className="h-4.5 w-4.5 fill-current" />
+          {(() => {
+            const avgRating = product.reviews.length > 0 
+              ? (product.reviews.reduce((acc, rev) => acc + rev.rating, 0) / product.reviews.length).toFixed(1)
+              : "5.0";
+            return (
+              <div className="flex items-center gap-4 border-b-2 border-foreground pb-4">
+                <div className="flex items-center gap-1">
+                  <div className="flex text-primary">
+                    <Star className="h-4.5 w-4.5 fill-current" />
+                    <Star className="h-4.5 w-4.5 fill-current" />
+                    <Star className="h-4.5 w-4.5 fill-current" />
+                    <Star className="h-4.5 w-4.5 fill-current" />
+                    <Star className="h-4.5 w-4.5 fill-current" />
+                  </div>
+                  <span className="text-xs font-bold text-foreground mt-0.5">{avgRating}</span>
+                </div>
+                <span className="text-xs text-muted-foreground">•</span>
+                <span className="text-xs text-muted-foreground font-semibold">
+                  {product.reviews.length} {product.reviews.length === 1 ? "avaliação" : "avaliações"} de clientes
+                </span>
               </div>
-              <span className="text-xs font-bold text-foreground mt-0.5">5.0</span>
-            </div>
-            <span className="text-xs text-muted-foreground">•</span>
-            <span className="text-xs text-muted-foreground font-semibold">
-              {product.reviews.length} {product.reviews.length === 1 ? "avaliação" : "avaliações"} de clientes
-            </span>
-          </div>
+            );
+          })()}
 
           {/* Interactive options & CTA form */}
           <ProductDetailForm product={product} />
 
           {/* Simple highlights badges */}
-          <div className="grid grid-cols-3 gap-3 text-center">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center">
             <div className="flex flex-col items-center gap-1.5 border-2 border-foreground bg-card p-3">
               <ShieldCheck className="h-5 w-5 text-primary" />
               <span className="font-mono text-[10px] font-bold uppercase tracking-wide text-foreground">Garantia</span>
@@ -131,9 +138,9 @@ export default async function ProductDetailPage({ params }: PageProps) {
             </div>
             <div className="flex flex-col items-center gap-1.5 border-2 border-foreground bg-card p-3">
               <Eye className="h-5 w-5 text-primary" />
-              <span className="font-mono text-[10px] font-bold uppercase tracking-wide text-foreground">Higienização</span>
+              <span className="font-mono text-[10px] font-bold uppercase tracking-wide text-foreground">Cuidados</span>
               <span className="text-[9px] text-muted-foreground">
-                {product.isWashable ? "Lavável em máquina" : "Lavagem profissional"}
+                {product.isWashable ? "Fácil manutenção" : "Limpeza delicada"}
               </span>
             </div>
           </div>
@@ -157,7 +164,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
           <TabsContent value="detalhes" className="py-6 focus-visible:ring-0">
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-4xl whitespace-pre-line">
-              {product.description || "Este tapete não possui uma descrição cadastrada."}
+              {product.description || "Este produto não possui uma descrição cadastrada."}
             </p>
           </TabsContent>
           
@@ -165,31 +172,31 @@ export default async function ProductDetailPage({ params }: PageProps) {
             <div className="max-w-xl border-2 border-foreground bg-card overflow-hidden">
               <table className="w-full text-sm">
                 <tbody className="divide-y-2 divide-foreground">
-                  <tr className="grid grid-cols-2 p-3">
+                  <tr className="flex flex-col gap-1 p-3 sm:grid sm:grid-cols-2">
                     <td className="font-semibold text-foreground">Marca</td>
                     <td className="text-muted-foreground">{product.brand || "Lojai"}</td>
                   </tr>
-                  <tr className="grid grid-cols-2 p-3">
-                    <td className="font-semibold text-foreground">Material / Fibra</td>
+                  <tr className="flex flex-col gap-1 p-3 sm:grid sm:grid-cols-2">
+                    <td className="font-semibold text-foreground">Material Principal</td>
                     <td className="text-muted-foreground">{product.material || "Não especificado"}</td>
                   </tr>
-                  <tr className="grid grid-cols-2 p-3">
+                  <tr className="flex flex-col gap-1 p-3 sm:grid sm:grid-cols-2">
                     <td className="font-semibold text-foreground">Cores Disponíveis</td>
                     <td className="text-muted-foreground">{product.colors.join(", ")}</td>
                   </tr>
-                  <tr className="grid grid-cols-2 p-3">
+                  <tr className="flex flex-col gap-1 p-3 sm:grid sm:grid-cols-2">
                     <td className="font-semibold text-foreground">Tamanhos Disponíveis</td>
                     <td className="text-muted-foreground">{product.sizes.join(", ")}</td>
                   </tr>
                   {product.weight && (
-                    <tr className="grid grid-cols-2 p-3">
+                    <tr className="flex flex-col gap-1 p-3 sm:grid sm:grid-cols-2">
                       <td className="font-semibold text-foreground">Peso Médio</td>
                       <td className="text-muted-foreground">{Number(product.weight)} kg</td>
                     </tr>
                   )}
-                  <tr className="grid grid-cols-2 p-3">
-                    <td className="font-semibold text-foreground">Lavável em Casa</td>
-                    <td className="text-muted-foreground">{product.isWashable ? "Sim" : "Não (Lavagem à seco profissional)"}</td>
+                  <tr className="flex flex-col gap-1 p-3 sm:grid sm:grid-cols-2">
+                    <td className="font-semibold text-foreground">Cuidados de Limpeza</td>
+                    <td className="text-muted-foreground">{product.isWashable ? "Pode ser limpo com pano úmido" : "Limpeza com pano seco ou espanador"}</td>
                   </tr>
                 </tbody>
               </table>
@@ -233,7 +240,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
           <h2 className="display text-3xl text-foreground">
             Você Também Pode Gostar
           </h2>
-          <ProductGrid products={relatedProducts} skeletonCount={4} />
+          <ProductGrid products={relatedProducts} skeletonCount={4} scrollOnMobile={true} />
         </section>
       )}
     </div>

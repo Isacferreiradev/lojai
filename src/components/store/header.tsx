@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SearchBar } from "@/components/store/search-bar";
@@ -19,7 +19,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Menu, ChevronDown } from "lucide-react";
+import { Menu, ChevronDown, Search, X } from "lucide-react";
 import { CATEGORIES } from "@/lib/constants";
 
 const TICKER_ITEMS = [
@@ -27,13 +27,15 @@ const TICKER_ITEMS = [
   "ATÉ 12X SEM JUROS",
   "1ª TROCA GRÁTIS",
   "FRETE GRÁTIS ACIMA DE R$350",
-  "TAPETES QUE SÃO ARTE",
+  "DECORAÇÃO QUE É ARTE",
 ];
 
 export function Header() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const mobileSearchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 12);
@@ -84,7 +86,7 @@ export function Header() {
               <SheetContent side="left" className="flex h-full w-[300px] flex-col bg-card p-0">
                 <SheetHeader className="border-b-2 border-foreground px-6 py-5">
                   <SheetTitle className="text-left text-2xl font-extrabold tracking-tight">
-                    LOJAI<span className="text-primary">.</span>
+                    ORNA CASA<span className="text-primary">.</span>
                   </SheetTitle>
                 </SheetHeader>
 
@@ -109,7 +111,7 @@ export function Header() {
                         : "text-foreground/70 hover:bg-muted hover:text-foreground"
                     }`}
                   >
-                    Todos os Tapetes
+                    Todos os Produtos
                   </Link>
 
                   <div className="mt-3 border-t-2 border-foreground pt-3">
@@ -135,7 +137,7 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex shrink-0 items-center">
             <span className="font-heading text-2xl font-extrabold tracking-tight text-foreground transition-opacity hover:opacity-70 md:text-3xl">
-              LOJAI<span className="text-primary">.</span>
+              ORNA CASA<span className="text-primary">.</span>
             </span>
           </Link>
 
@@ -171,21 +173,40 @@ export function Header() {
                 pathname.startsWith("/produtos") ? "text-primary" : "text-foreground/65 hover:text-foreground"
               }`}
             >
-              Todos os Tapetes
+              Todos os Produtos
             </Link>
           </nav>
 
-          {/* Search */}
+          {/* Search — desktop */}
           <div className="mx-4 hidden max-w-sm flex-1 sm:block md:max-w-md">
             <SearchBar />
           </div>
 
-          {/* Actions — cart only (loja sem login) */}
+          {/* Actions */}
           <div className="flex items-center gap-1 md:gap-2">
+            {/* Mobile search toggle */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="cursor-pointer text-foreground sm:hidden"
+              onClick={() => {
+                setMobileSearchOpen((v) => !v);
+                setTimeout(() => mobileSearchRef.current?.focus(), 100);
+              }}
+            >
+              {mobileSearchOpen ? <X className="h-5 w-5 stroke-[2.5]" /> : <Search className="h-5 w-5 stroke-[2.5]" />}
+            </Button>
             <CartDrawer />
           </div>
         </div>
       </div>
+
+      {/* Mobile search bar — slides down below header */}
+      {mobileSearchOpen && (
+        <div className="w-full border-b-2 border-foreground bg-background px-4 py-2.5 sm:hidden animate-fade-in">
+          <SearchBar />
+        </div>
+      )}
     </header>
   );
 }

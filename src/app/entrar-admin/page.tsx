@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Lock } from "lucide-react";
 
-export const metadata = { title: "Acesso Restrito | Lojai" };
+export const metadata = { title: "Acesso Restrito | Orna Casa" };
 
 export default async function AdminLoginPage({
   searchParams,
@@ -21,7 +21,7 @@ export default async function AdminLoginPage({
             <Lock className="h-5 w-5" />
           </div>
           <span className="font-heading text-2xl font-extrabold tracking-tight text-foreground">
-            LOJAI<span className="text-primary">.</span>
+            ORNA CASA<span className="text-primary">.</span>
           </span>
           <p className="label-mono text-muted-foreground">Painel Administrativo</p>
         </div>

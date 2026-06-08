@@ -11,7 +11,7 @@ export function ProductsChart({ data }: ProductsChartProps) {
   return (
     <Card className="bg-card">
       <CardHeader>
-        <CardTitle className="font-heading text-base font-extrabold text-foreground">Tapetes Mais Vendidos</CardTitle>
+        <CardTitle className="font-heading text-base font-extrabold text-foreground">Produtos Mais Vendidos</CardTitle>
         <CardDescription className="font-mono text-xs text-muted-foreground">Top 5 modelos com maior saída de estoque.</CardDescription>
       </CardHeader>
       <CardContent>

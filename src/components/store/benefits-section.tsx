@@ -9,7 +9,7 @@ const benefits = [
   {
     icon: Award,
     title: "Qualidade Artesanal",
-    description: "Tapetes selecionados com acabamento de alta costura e durabilidade garantida.",
+    description: "Peças selecionadas com acabamento impecável e durabilidade garantida.",
   },
   {
     icon: HeartHandshake,

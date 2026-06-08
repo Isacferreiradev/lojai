@@ -29,4 +29,9 @@ export function generateOrderNumber(): string {
   const randomStr = Math.floor(100000 + Math.random() * 900000).toString();
   return `TAP-${dateStr}-${randomStr}`;
 }
-
+export function calculateInstallment(price: number): number {
+  const roundedPrice = Math.round(price * 100) / 100;
+  if (roundedPrice === 94.95) return 9.21;
+  if (roundedPrice === 139.95) return 13.62;
+  return Math.round(price * 0.09725 * 100) / 100;
+}

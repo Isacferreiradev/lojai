@@ -27,12 +27,12 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Lojai | Tapetes Premium e Sofisticados",
-    template: "%s | Lojai"
+    default: "Orna Casa | Decoração Premium e Design Autoral",
+    template: "%s | Orna Casa"
   },
-  description: "Encontre os melhores tapetes artesanais, modernos, felpudos e sob medida para sua casa. Design premium com frete para todo o Brasil.",
-  keywords: ["tapetes", "tapetes de sala", "tapetes modernos", "tapetes artesanais", "decoração", "casa"],
-  authors: [{ name: "Lojai" }],
+  description: "Encontre as melhores peças de decoração, iluminação, quadros e objetos para sua casa. Design premium com frete para todo o Brasil.",
+  keywords: ["decoração", "iluminação", "quadros", "objetos decorativos", "casa"],
+  authors: [{ name: "Orna Casa" }],
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
 };
 

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Product } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/stores/cart-store";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, calculateInstallment } from "@/lib/utils";
 import { ShoppingCart, CreditCard, Minus, Plus, ShieldCheck, Zap, Truck } from "lucide-react";
 import { toast } from "sonner";
 import { fbpTrack } from "@/lib/fbpixel";
@@ -91,7 +91,7 @@ export function ProductDetailForm({ product }: ProductDetailFormProps) {
           )}
         </div>
         <p className="font-mono text-xs text-muted-foreground">
-          ou <span className="font-semibold text-foreground">12x de {formatCurrency(activePrice / 12)}</span> sem juros
+          ou <span className="font-semibold text-foreground">12x de {formatCurrency(calculateInstallment(activePrice))}</span>
           {activePrice >= SHIPPING_FREE_LIMIT && (
             <span className="ml-2 inline-flex items-center gap-1 font-semibold text-primary">
               <Truck className="h-3.5 w-3.5" /> Frete grátis
@@ -214,7 +214,7 @@ export function ProductDetailForm({ product }: ProductDetailFormProps) {
       <div className="fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t-2 border-foreground bg-background/95 p-3 backdrop-blur-md md:hidden">
         <div className="leading-none">
           <p className="font-heading text-lg font-extrabold text-foreground">{formatCurrency(activePrice)}</p>
-          <p className="font-mono text-[0.6rem] text-muted-foreground">12x {formatCurrency(activePrice / 12)}</p>
+          <p className="font-mono text-[0.6rem] text-muted-foreground">12x de {formatCurrency(calculateInstallment(activePrice))}</p>
         </div>
         <Button
           size="lg"

@@ -14,7 +14,7 @@ export default function NotFound() {
         Esse caminho não existe.
       </h2>
       <p className="text-muted-foreground mt-2 max-w-md">
-        O tapete que você está procurando pode ter sido movido para outra sala ou
+        O produto que você está procurando pode ter sido movido para outra coleção ou
         nunca existiu. Que tal voltar para a página inicial?
       </p>
       <div className="mt-8">

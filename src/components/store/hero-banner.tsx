@@ -33,9 +33,9 @@ export function HeroBanner({ slides }: { slides: Slide[] }) {
   return (
     <section className="border-b-2 border-foreground bg-background">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="grid grid-cols-1 items-stretch lg:grid-cols-2">
-          {/* Text column */}
-          <div className="flex flex-col justify-center gap-7 border-foreground py-12 lg:border-r-2 lg:py-20 lg:pr-12">
+        <div className="grid grid-cols-1 items-stretch lg:grid-cols-2 lg:aspect-[8/3]">
+          {/* Text column — hidden on mobile/tablet, shown on desktop (lg and above) */}
+          <div className="hidden lg:flex flex-col justify-center gap-5 border-foreground py-8 lg:border-r-2 lg:py-12 lg:pr-12">
             <div key={`eyebrow-${current}`} className="animate-fade-in flex items-center gap-3">
               <span className="label-mono text-primary">
                 {String(Math.min(current, slides.length - 1) + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
@@ -46,14 +46,14 @@ export function HeroBanner({ slides }: { slides: Slide[] }) {
 
             <h1
               key={`title-${current}`}
-              className="display animate-rise text-6xl text-foreground sm:text-7xl md:text-8xl whitespace-pre-line"
+              className="display animate-rise text-4xl text-foreground sm:text-5xl md:text-6xl lg:text-5xl xl:text-6xl 2xl:text-7xl whitespace-pre-line"
             >
               {slide.title}
             </h1>
 
             <p
               key={`sub-${current}`}
-              className="animate-fade-in max-w-md text-base leading-relaxed text-muted-foreground"
+              className="animate-fade-in max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base"
             >
               {slide.subtitle}
             </p>
@@ -74,40 +74,29 @@ export function HeroBanner({ slides }: { slides: Slide[] }) {
             </div>
           </div>
 
-          {/* Image column */}
-          <div className="relative min-h-[340px] overflow-hidden bg-muted lg:min-h-[600px]">
+          {/* Image column — clickable, full width with exact aspect ratio on mobile, fills height on desktop */}
+          <Link
+            href={slide.ctaHref}
+            className="relative w-full aspect-[4/3] overflow-hidden lg:aspect-auto lg:h-full lg:w-full block"
+          >
             {slides.map((s, index) => (
-              <Image
+              <div
                 key={index}
-                src={s.imageUrl}
-                alt={s.title.replace(/\n/g, " ")}
-                fill
-                className={`object-cover object-center transition-opacity duration-700 ${
+                className={`absolute inset-0 transition-opacity duration-700 ${
                   index === current ? "opacity-100" : "opacity-0"
                 }`}
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                priority={index === 0}
-              />
+              >
+                <Image
+                  src={s.imageUrl}
+                  alt={s.title.replace(/\n/g, " ")}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  priority={index === 0}
+                />
+              </div>
             ))}
-
-            {/* Slide indicator chips */}
-            <div className="absolute bottom-5 left-5 z-20 flex gap-2">
-              {slides.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrent(i)}
-                  aria-label={`Ir para slide ${i + 1}`}
-                  className={`h-8 border-2 border-foreground font-mono text-[0.65rem] font-bold transition-all ${
-                    i === current
-                      ? "w-12 bg-primary text-primary-foreground"
-                      : "w-8 bg-background/80 text-foreground hover:bg-background"
-                  }`}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </button>
-              ))}
-            </div>
-          </div>
+          </Link>
         </div>
       </div>
     </section>

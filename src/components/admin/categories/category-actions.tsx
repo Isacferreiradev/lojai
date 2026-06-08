@@ -189,7 +189,7 @@ function CategoryModal({ category, onClose }: CategoryModalProps) {
             <input
               {...register("name")}
               onBlur={generateSlug}
-              placeholder="Ex: Tapetes para Sala"
+              placeholder="Ex: Objetos para Sala"
               className="w-full h-10 rounded-none border-2 border-foreground bg-card px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
             {errors.name && <p className="text-xs text-destructive mt-1">{errors.name.message}</p>}
@@ -199,7 +199,7 @@ function CategoryModal({ category, onClose }: CategoryModalProps) {
             <label className="text-sm font-medium mb-1.5 block">Slug *</label>
             <input
               {...register("slug")}
-              placeholder="tapetes-para-sala"
+              placeholder="objetos-para-sala"
               className="w-full h-10 rounded-none border-2 border-foreground bg-card px-3 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-primary/30"
             />
             {errors.slug && <p className="text-xs text-destructive mt-1">{errors.slug.message}</p>}

@@ -102,7 +102,7 @@ export function BannerEditor({ initialSlides }: { initialSlides: HeroSlide[] }) 
                 </div>
                 <div className="space-y-1.5">
                   <Label>Título (use Enter para quebrar linha)</Label>
-                  <Textarea value={slide.title} onChange={(e) => update(i, "title", e.target.value)} rows={2} placeholder={"Tapetes\nque são\narte."} />
+                  <Textarea value={slide.title} onChange={(e) => update(i, "title", e.target.value)} rows={2} placeholder={"Decoração\nque é\narte."} />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Subtítulo</Label>

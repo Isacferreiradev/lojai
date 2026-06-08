@@ -105,7 +105,7 @@ export default function CartPage() {
           Carrinho vazio
         </h1>
         <p className="mt-3 max-w-sm text-muted-foreground">
-          Você ainda não escolheu nenhum tapete para o seu lar. Explore nosso catálogo completo!
+          Você ainda não escolheu nenhum produto para o seu lar. Explore nosso catálogo completo!
         </p>
         <Button asChild size="lg" className="mt-8">
           <Link href="/produtos">Explorar Catálogo</Link>

@@ -145,7 +145,7 @@ export default function CheckoutPage() {
         <ShieldCheck className="h-16 w-16 text-primary mb-4" />
         <h1 className="display text-3xl text-foreground">Carrinho vazio</h1>
         <p className="text-muted-foreground mt-2 max-w-sm">
-          Adicione tapetes ao carrinho para finalizar a compra.
+          Adicione produtos ao carrinho para finalizar a compra.
         </p>
         <Button asChild size="lg" className="mt-8">
           <a href="/produtos">Explorar Catálogo</a>

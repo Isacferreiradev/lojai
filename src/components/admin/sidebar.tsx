@@ -56,7 +56,7 @@ export function Sidebar() {
         <div className="flex items-center justify-between border-b border-background/20 pb-4">
           {!collapsed && (
             <span className="font-heading text-2xl font-extrabold tracking-tight text-background">
-              LOJAI<span className="text-primary">.</span>
+              ORNA CASA<span className="text-primary">.</span>
               <span className="label-mono block text-background/50">Painel Admin</span>
             </span>
           )}

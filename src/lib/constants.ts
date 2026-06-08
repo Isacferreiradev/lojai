@@ -1,14 +1,14 @@
-export const STORE_NAME = "Lojai";
-export const STORE_DESCRIPTION = "Sua loja premium de tapetes artesanais, modernos e sofisticados.";
+export const STORE_NAME = "Orna Casa";
+export const STORE_DESCRIPTION = "Peças de decoração premium que transformam sua casa com design autoral e aconchego.";
 export const STORE_URL = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
 export const CATEGORIES = [
-  { name: "Sala de Estar", slug: "sala", image: "/images/cat-sala.png" },
-  { name: "Quarto", slug: "quarto", image: "/images/cat-quarto.png" },
-  { name: "Corredor", slug: "corredor", image: "/images/cat-modernos.png" },
-  { name: "Boho & Artesanal", slug: "boho", image: "/images/hero-2.png" },
-  { name: "Infantil", slug: "infantil", image: "/images/cat-infantil.png" },
-  { name: "Home Office", slug: "home-office", image: "/images/cat-felpudos.png" },
+  { name: "Iluminação", slug: "iluminacao", image: "/images/produto_01/img1_ambiente.jpg" },
+  { name: "Quadros & Pôsteres", slug: "quadros", image: "/images/produto_07/img1_ambiente.jpg" },
+  { name: "Espelhos", slug: "espelhos", image: "/images/produto_11/img1_ambiente.jpg" },
+  { name: "Objetos Decorativos", slug: "objetos", image: "/images/produto_14/img1_ambiente.jpg" },
+  { name: "Têxteis & Aconchego", slug: "texteis", image: "/images/produto_28/img1_ambiente.jpg" },
+  { name: "Móveis de Apoio", slug: "moveis-apoio", image: "/images/produto_26/img1_ambiente.jpg" },
 ];
 
 export const SHIPPING_SIMULATION_PRICE = 45.0; // Default flat rate shipping if simulated

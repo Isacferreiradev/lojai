@@ -26,7 +26,7 @@ export function SettingsForm({ defaultValues }: SettingsFormProps) {
   } = useForm<SettingsFormData>({
     resolver: zodResolver(settingsSchema),
     defaultValues: {
-      storeName: defaultValues.storeName || "Lojai Tapetes",
+      storeName: defaultValues.storeName || "Orna Casa",
       storeEmail: defaultValues.storeEmail || "",
       storePhone: defaultValues.storePhone || "",
       storeAddress: defaultValues.storeAddress || "",
@@ -60,7 +60,7 @@ export function SettingsForm({ defaultValues }: SettingsFormProps) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="sm:col-span-2">
             <label className="text-sm font-medium mb-1.5 block">Nome da Loja *</label>
-            <input {...register("storeName")} className={fieldClass} placeholder="Lojai Tapetes" />
+            <input {...register("storeName")} className={fieldClass} placeholder="Orna Casa" />
             {errors.storeName && <p className="text-xs text-destructive mt-1">{errors.storeName.message}</p>}
           </div>
           <div>
@@ -150,7 +150,7 @@ export function SettingsForm({ defaultValues }: SettingsFormProps) {
             <input
               {...register("metaTitle")}
               className={fieldClass}
-              placeholder="Lojai Tapetes — Tapetes modernos para sua casa"
+              placeholder="Orna Casa — Peças de decoração premium para sua casa"
             />
           </div>
           <div>
@@ -159,7 +159,7 @@ export function SettingsForm({ defaultValues }: SettingsFormProps) {
               {...register("metaDescription")}
               rows={3}
               className="w-full rounded-none border-2 border-foreground bg-card px-3 py-2 text-sm focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/30 resize-none"
-              placeholder="Encontre os melhores tapetes para sala, quarto e mais. Qualidade premium com entrega rápida."
+              placeholder="Encontre as melhores peças para transformar sua casa. Qualidade premium com entrega rápida."
             />
           </div>
         </div>

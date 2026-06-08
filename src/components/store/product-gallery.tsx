@@ -29,7 +29,7 @@ export function ProductGallery({ images }: ProductGalleryProps) {
     setZoomStyle(null);
   };
 
-  const activeImage = images[activeIndex] || { url: "/images/placeholder.png", alt: "Tapete" };
+  const activeImage = images[activeIndex] || { url: "/images/placeholder.png", alt: "Produto" };
 
   return (
     <div className="flex flex-col gap-3">

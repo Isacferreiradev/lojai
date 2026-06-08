@@ -89,31 +89,31 @@ export function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* Info */}
-      <div className="flex flex-1 flex-col justify-between p-4">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between gap-2">
-            <span className="label-mono text-muted-foreground">
+      <div className="flex flex-1 flex-col justify-between p-3 sm:p-4">
+        <div className="space-y-1.5 sm:space-y-2">
+          <div className="flex items-center justify-between gap-1 sm:gap-2">
+            <span className="label-mono truncate text-muted-foreground" style={{ fontSize: '0.65rem' }}>
               {product.material || "Algodão"}
             </span>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 shrink-0">
               <Star className="h-3 w-3 fill-primary text-primary" />
               <span className="font-mono text-[0.65rem] font-semibold text-foreground">5.0</span>
             </div>
           </div>
-          <h3 className="line-clamp-2 font-heading text-sm font-bold leading-snug text-foreground transition-colors group-hover:text-primary">
+          <h3 className="line-clamp-2 font-heading text-xs sm:text-sm font-bold leading-snug text-foreground transition-colors group-hover:text-primary">
             {product.name}
           </h3>
         </div>
 
         {/* Price + Mobile Cart */}
-        <div className="mt-4 flex items-end justify-between border-t-2 border-foreground pt-3">
+        <div className="mt-3 flex items-end justify-between border-t-2 border-foreground pt-2 sm:mt-4 sm:pt-3">
           <div className="flex flex-col">
             {promoPrice && (
-              <span className="font-mono text-xs text-muted-foreground line-through">
+              <span className="font-mono text-[0.6rem] text-muted-foreground line-through sm:text-xs">
                 {formatCurrency(originalPrice)}
               </span>
             )}
-            <span className="font-heading text-lg font-extrabold text-foreground">
+            <span className="font-heading text-sm font-extrabold text-foreground sm:text-base">
               {formatCurrency(activePrice)}
             </span>
           </div>
@@ -122,10 +122,10 @@ export function ProductCard({ product }: ProductCardProps) {
             size="icon"
             variant="outline"
             onClick={handleAddToCart}
-            className="size-9 cursor-pointer md:hidden"
+            className="h-8 w-8 cursor-pointer md:hidden flex-shrink-0"
             disabled={product.stock <= 0}
           >
-            <ShoppingBag className="h-4 w-4" />
+            <ShoppingBag className="h-3.5 w-3.5" />
           </Button>
         </div>
       </div>
