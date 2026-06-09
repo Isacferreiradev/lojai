@@ -11,8 +11,8 @@ export const CATEGORIES = [
   { name: "Móveis de Apoio", slug: "moveis-apoio", image: "/images/produto_26/img1_ambiente.jpg" },
 ];
 
-export const SHIPPING_SIMULATION_PRICE = 45.0; // Default flat rate shipping if simulated
-export const SHIPPING_FREE_LIMIT = 350.0; // Free shipping on orders over R$ 350
+export const SHIPPING_SIMULATION_PRICE = 0; // Free shipping for all orders
+export const SHIPPING_FREE_LIMIT = 0; // Free shipping always
 
 export const CONTACT_INFO = {
   phone: "(11) 99999-9999",

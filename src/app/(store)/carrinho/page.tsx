@@ -57,8 +57,8 @@ export default function CartPage() {
       
       const address = await response.json();
       setCepSuccess(true);
-      // Flat rate shipping: R$ 45, or free if subtotal is above R$ 350
-      setShippingCost(subtotal >= 350 ? 0 : 45.0);
+      // Free shipping for all orders
+      setShippingCost(0);
       toast.success(`CEP encontrado: ${address.city} - ${address.state}`);
     } catch (err: any) {
       setShippingError(err.message || "CEP não encontrado.");
@@ -93,7 +93,7 @@ export default function CartPage() {
     }
   };
 
-  const calculatedTotal = total + (shippingCost || 0);
+  const calculatedTotal = total; // Shipping is always free
 
   if (items.length === 0) {
     return (
